@@ -46,6 +46,7 @@ def local_thr(url, count, size, poll, copy):
         msg = s.recv(block, copy=copy)
         if i % 150 == 0:
             sys.stdout.write('.')
+            sys.stdout.flush()
     elapsed = watch.stop()
     if elapsed == 0:
         elapsed = 1

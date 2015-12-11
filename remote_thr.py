@@ -41,6 +41,7 @@ def remote_thr(url, count, size, copy, poll):
         s.send(msg, block, copy=copy)
         if i % 150 == 0:
             sys.stdout.write('.')
+            sys.stdout.flush()
 
     s.close()
     ctx.term()
