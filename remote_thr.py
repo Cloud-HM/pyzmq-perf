@@ -29,7 +29,7 @@ def remote_thr(url, count, size, copy, poll):
 
     print("Connecting to: {url}".format(url=url))
     s.connect(url)
-    print("Sending count={count}, size={size}")
+    print("Sending count={count}, size={size}".format(count=count, size=size))
 
     msg = zmq.Message(b' ' * size)
     block = zmq.NOBLOCK if poll else 0
