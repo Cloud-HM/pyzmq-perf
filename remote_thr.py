@@ -7,6 +7,7 @@
 #  Some original test code Copyright (c) 2007-2010 iMatix Corporation,
 #  Used under LGPLv3
 
+import sys
 import time
 
 import zmq
@@ -26,7 +27,9 @@ def remote_thr(url, count, size, copy, poll):
         p = zmq.Poller()
         p.register(s)
 
+    print("Connecting to: {url}".format(url=url))
     s.connect(url)
+    print("Sending count={count}, size={size}")
 
     msg = zmq.Message(b' ' * size)
     block = zmq.NOBLOCK if poll else 0
@@ -36,15 +39,18 @@ def remote_thr(url, count, size, copy, poll):
             res = p.poll()
             assert (res[0][1] & zmq.POLLOUT)
         s.send(msg, block, copy=copy)
+        if i % 150 == 0:
+            sys.stdout.write('.')
 
     s.close()
     ctx.term()
+
+    print("\nDone.")
 
 
 def main():
     args = parse_args()
 
-    print ("Running program...")
     tic = time.time()
     remote_thr(args.url, args.count, args.size, args.poll, args.copy)
     toc = time.time()

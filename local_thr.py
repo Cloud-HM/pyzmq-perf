@@ -7,6 +7,7 @@
 #  Some original test code Copyright (c) 2007-2010 iMatix Corporation,
 #  Used under LGPLv3
 
+import sys
 import time
 
 import zmq
@@ -43,6 +44,8 @@ def local_thr(url, count, size, poll, copy):
         if poll:
             res = p.poll()
         msg = s.recv(block, copy=copy)
+        if i % 150 == 0:
+            sys.stdout.write('.')
     elapsed = watch.stop()
     if elapsed == 0:
         elapsed = 1
@@ -50,6 +53,7 @@ def local_thr(url, count, size, poll, copy):
     throughput = (1e6 * float(count)) / float(elapsed)
     megabits = float(throughput * size * 8) / 1e6
 
+    print ("\nDone.")
     print ("message size   : %8i     [B]" % (size,))
     print ("message count  : %8i     [msgs]" % (count,))
     print ("mean throughput: %8.0f     [msg/s]" % (throughput,))
